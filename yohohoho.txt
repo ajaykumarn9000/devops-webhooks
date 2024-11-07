@@ -1,34 +1,20 @@
-pipeline{
-    agent any
-    stages{
-        stage ('Plan phase'){
-            steps{
-                echo 'Hi. This is SFIT '
-            }
-        }
-        stage ('code phase'){
-            steps{
-                input('Do you want to continue?')
-            }
-        }
-        stage ('integrate phase'){
-            when{
-                not{
-                    branch "master"
-                }
-            }
-            steps {
-                echo 'Integration test passed'
-            }
-        }
-        stage ('testing phase'){
-            parallel{
-                stage ('unit test'){
-                    steps{
-                        echo 'running unit test'
-                    }
-                }
+pipeline {
+ agent any
+ parameters {
+    string(name: 'USER_NAME', defaultValue: 'World', description: 'Name of the user')
+ }
+ stages {
+    stage('Greet User') {
+        steps {
+            script {
+                echo "Hello, ${params.USER_NAME}! Welcome to Jenkins."
             }
         }
     }
+ }
+ post {
+     always {
+        echo 'Pipeline execution completed.'
+     }
+ }
 }
